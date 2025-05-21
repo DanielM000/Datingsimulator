@@ -6,7 +6,7 @@ import time
 karaktarer = [
     {"namn": "Alex", "poang": 0, "intressen": "Sport"},
     {"namn": "Sam", "poang": 0, "intressen": "Natur"},
-    {"namn": "Jamie", "poang": 0, "intressen": "Konst"}
+    {"namn": "Jamie", "poang": 0, "intressen": "TV-spel"}
 ]
 
 # Globala variabler
@@ -17,7 +17,7 @@ t = 8
 # Skapa huvudfönster
 root = tk.Tk()
 root.title("Speeddating Simulator")
-root.geometry("400x300")
+root.geometry("330x600")
 
 namn_label = tk.Label(root, text="", font=("Helvetica", 16))
 namn_label.pack(pady=15)
@@ -32,38 +32,49 @@ label = tk.Label(root)
 label.place(x=35, y=15)
 
 # Funktion: Hantera val
-def val1():
+def val1(): # Ge en komplimang
     if index == 0:
         karaktarer[index]["poang"] += 1
         svar_label.config(text="Bra val!")
     elif index == 1:
+        karaktarer[index]["poang"] += 1
+        svar_label.config(text="Bra val!")
+    elif index == 2:
         karaktarer[index]["poang"] += 0
         svar_label.config(text="Hmm, inte imponerad...")
+
+def val2(): # Fråga om väder
+    if index == 0:
+        karaktarer[index]["poang"] += 0
+        svar_label.config(text="Hmm, inte imponerad...")
+    elif index == 1:
+        karaktarer[index]["poang"] += 1
+        svar_label.config(text="Bra val!")
     elif index == 2:
         karaktarer[index]["poang"] -= 1
         svar_label.config(text="Det föll inte i smaken!")
 
-def val2():
+def val3(): # Prata om dig själv
     if index == 0:
-        karaktarer[index]["poang"] += 0
-        svar_label.config(text="Hmm, inte imponerad...")
+        karaktarer[index]["poang"] -= 1
+        svar_label.config(text="Det föll inte i smaken!")
     elif index == 1:
         karaktarer[index]["poang"] -= 1
         svar_label.config(text="Det föll inte i smaken!")
     elif index == 2:
-        karaktarer[index]["poang"] += 1
-        svar_label.config(text="Bra val!")
+        karaktarer[index]["poang"] += 0
+        svar_label.config(text="Hmm, inte imponerad...")
 
-def val3():
+def val4(): # Prata om fotboll
     if index == 0:
-        karaktarer[index]["poang"] -= 1
-        svar_label.config(text="Det föll inte i smaken!")
-    elif index == 1:
         karaktarer[index]["poang"] += 1
         svar_label.config(text="Bra val!")
-    elif index == 2:
+    elif index == 1:
         karaktarer[index]["poang"] += 0
         svar_label.config(text="Hmm, inte imponerad...")
+    elif index == 2:
+        karaktarer[index]["poang"] -= 1
+        svar_label.config(text="Det föll inte i smaken!")
 
 def countdown(count): 
     label['text'] = count
@@ -80,10 +91,10 @@ def visa_val():
     val_frame = tk.Frame(root)
     val_frame.pack()
 
-    tk.Button(val_frame, text="Ge komplimang", command=val1).pack(pady=5)
+    tk.Button(val_frame, text="Ge en komplimang", command=val1).pack(pady=5)
     tk.Button(val_frame, text="Fråga om väder", command=val2).pack(pady=5)
     tk.Button(val_frame, text="Prata om dig själv", command=val3).pack(pady=5)
-    tk.Button(val_frame, text="Prata om fotboll", ).pack(pady=5)
+    tk.Button(val_frame, text="Prata om fotboll", command=val4).pack(pady=5)
 
 # Funktion: Starta dejt
 def starta_dejt():
