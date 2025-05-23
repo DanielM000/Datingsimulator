@@ -1,100 +1,95 @@
 import tkinter as tk
 import random
-import time
 
-# Karaktärer och deras namn
-karaktarer = [
-    {"namn": "Alex", "poang": 0, "intressen": "Sport"},
-    {"namn": "Sam", "poang": 0, "intressen": "Natur"},
-    {"namn": "Jamie", "poang": 0, "intressen": "TV-spel"}
+# Ursprungliga karaktärer men nu med intressen och ointressen
+karaktarer_ursprung = [
+    {"namn": "Alex", "poang": 0, "intressen": ["Sport", "Resor"], "ointressen": ["TV-spel"]},
+    {"namn": "Sam", "poang": 0, "intressen": ["Natur", "Matlagning"], "ointressen": ["Sport"]},
+    {"namn": "Jamie", "poang": 0, "intressen": ["TV-spel", "Musik"], "ointressen": ["Natur"]},
+    {"namn": "Taylor", "poang": 0, "intressen": ["Musik", "Resor"], "ointressen": ["Matlagning"]},
+    {"namn": "Morgan", "poang": 0, "intressen": ["Matlagning", "Natur"], "ointressen": ["TV-spel"]},
+    {"namn": "Jordan", "poang": 0, "intressen": ["Resor", "Sport"], "ointressen": ["Musik"]}
 ]
 
+# Alla möjliga valalternativ och deras relaterade ämnen
+val_dict = {
+    "Ge en komplimang": ["Alla"],
+    "Fråga om resor": ["Resor", "Natur"],
+    "Prata om fotboll": ["Sport"],
+    "Diskutera spelkonsoler": ["TV-spel"],
+    "Prata om favoritartist": ["Musik"],
+    "Dela recept": ["Matlagning"],
+    "Prata om klimatet": ["Natur"],
+    "Berätta om dig själv": [],
+    "Fråga om favoritrestaurang": ["Matlagning", "Resor"],
+    "Dela barndomsminne": [],
+    "Fråga om sportintresse": ["Sport"],
+    "Tipsa om Netflix-serier": ["Musik", "TV-spel"]
+}
+
 # Globala variabler
+karaktarer = []
 index = 0
 val_frame = None
-t = 8
+t = 12
 
 # Skapa huvudfönster
 root = tk.Tk()
 root.title("Speeddating Simulator")
-root.geometry("330x600")
+root.geometry("400x700")
 
+# Etiketter för att visa info
 namn_label = tk.Label(root, text="", font=("Helvetica", 16))
 namn_label.pack(pady=15)
 
-intressen_label = tk.Label(root, text="", font=("Helvetica", 14))
-intressen_label.pack(pady=10)
+intressen_label = tk.Label(root, text="", font=("Helvetica", 12))
+intressen_label.pack()
 
-svar_label = tk.Label(root, text="", font=("Helvetica", 12))
+ointressen_label = tk.Label(root, text="", font=("Helvetica", 12))
+ointressen_label.pack()
+
+svar_label = tk.Label(root, text="", font=("Helvetica", 12), wraplength=350)
 svar_label.pack(pady=10)
 
-label = tk.Label(root)
-label.place(x=35, y=15)
+label = tk.Label(root, font=("Helvetica", 12))
+label.place(x=20, y=20)
 
-# Funktion: Hantera val
-def val1(): # Ge en komplimang
-    if index == 0:
-        karaktarer[index]["poang"] += 1
+# Funktion: Hantera val och poäng
+def hantera_val(val):
+    global index
+    person = karaktarer[index]
+    intressen = person["intressen"]
+    ointressen = person["ointressen"]
+    relaterade_amnen = val_dict[val]
+
+    if "Alla" in relaterade_amnen or any(a in intressen for a in relaterade_amnen):
+        person["poang"] += 1
         svar_label.config(text="Bra val!")
-    elif index == 1:
-        karaktarer[index]["poang"] += 1
-        svar_label.config(text="Bra val!")
-    elif index == 2:
-        karaktarer[index]["poang"] += 0
-        svar_label.config(text="Hmm, inte imponerad...")
-
-def val2(): # Fråga om väder
-    if index == 0:
-        karaktarer[index]["poang"] += 0
-        svar_label.config(text="Hmm, inte imponerad...")
-    elif index == 1:
-        karaktarer[index]["poang"] += 1
-        svar_label.config(text="Bra val!")
-    elif index == 2:
-        karaktarer[index]["poang"] -= 1
+    elif any(a in ointressen for a in relaterade_amnen):
+        person["poang"] -= 1
         svar_label.config(text="Det föll inte i smaken!")
-
-def val3(): # Prata om dig själv
-    if index == 0:
-        karaktarer[index]["poang"] -= 1
-        svar_label.config(text="Det föll inte i smaken!")
-    elif index == 1:
-        karaktarer[index]["poang"] -= 1
-        svar_label.config(text="Det föll inte i smaken!")
-    elif index == 2:
-        karaktarer[index]["poang"] += 0
-        svar_label.config(text="Hmm, inte imponerad...")
-
-def val4(): # Prata om fotboll
-    if index == 0:
-        karaktarer[index]["poang"] += 1
-        svar_label.config(text="Bra val!")
-    elif index == 1:
-        karaktarer[index]["poang"] += 0
-        svar_label.config(text="Hmm, inte imponerad...")
-    elif index == 2:
-        karaktarer[index]["poang"] -= 1
-        svar_label.config(text="Det föll inte i smaken!")
-
-def countdown(count): 
-    label['text'] = count
-    if count > 0 and index < len(karaktarer):
-        root.after(1000, countdown, count-1)
-    elif count <= 0  and index < len(karaktarer):
-        countdown(8)
     else:
-        label.destroy()
+        svar_label.config(text="Hmm, inte imponerad...")
 
-# Funktion: Visa valknappar
+# Funktion: Skapa valknappar
 def visa_val():
     global val_frame
     val_frame = tk.Frame(root)
     val_frame.pack()
 
-    tk.Button(val_frame, text="Ge en komplimang", command=val1).pack(pady=5)
-    tk.Button(val_frame, text="Fråga om väder", command=val2).pack(pady=5)
-    tk.Button(val_frame, text="Prata om dig själv", command=val3).pack(pady=5)
-    tk.Button(val_frame, text="Prata om fotboll", command=val4).pack(pady=5)
+    for val in val_dict:
+        tk.Button(val_frame, text=val, width=45, command=lambda v=val: hantera_val(v)).pack(pady=2)
+
+# Funktion: Timer för varje dejt
+def countdown(count): 
+    if index < len(karaktarer):
+        label.config(text=f"🕒 {count} sek")
+        if count > 0:
+            root.after(1000, countdown, count - 1)
+        else:
+            byt_dejt()
+    else:
+        label.config(text="")
 
 # Funktion: Starta dejt
 def starta_dejt():
@@ -106,14 +101,14 @@ def starta_dejt():
     if index < len(karaktarer):
         person = karaktarer[index]
         namn_label.config(text=f"Du dejtar {person['namn']}")
-        intressen_label.config(text=f"Intressen: {person['intressen']}")
+        intressen_label.config(text=f"Intressen: {', '.join(person['intressen'])}")
+        ointressen_label.config(text=f"Ointresserad av: {', '.join(person['ointressen'])}")
         visa_val()
-        root.after(8000, byt_dejt)  # 8 sekunder per dejt
+        countdown(t)
     else:
         visa_resultat()
-        intressen_label.destroy()
 
-# Funktion: Byt till nästa dejt
+# Funktion: Nästa dejt
 def byt_dejt():
     global index
     index += 1
@@ -122,17 +117,32 @@ def byt_dejt():
 # Funktion: Visa resultat
 def visa_resultat():
     namn_label.config(text="Dejtingrundan är över!")
+    intressen_label.config(text="")
+    ointressen_label.config(text="")
     if val_frame:
         val_frame.destroy()
 
-    # Hitta bästa match
     bast = max(karaktarer, key=lambda p: p["poang"])
-    svar_label.config(text=f"Bäst matchade du med {bast['namn']}! ({bast['poang']} poäng)")
+    poang_text = "\n".join([f"{p['namn']}: {p['poang']} poäng" for p in karaktarer])
+    svar_label.config(text=f"Bäst matchade du med {bast['namn']}!\n\nPoäng:\n{poang_text}")
 
-# Starta första dejten
-starta_dejt()
+    # Skapa spela igen-knapp
+    tk.Button(root, text="🔁 Spela igen", font=("Helvetica", 12, "bold"), bg="#ccf", command=spela_igen).pack(pady=20)
 
-countdown(8)
+# Funktion: Återställ spelet
+def spela_igen():
+    global index, karaktarer
+    index = 0
+    karaktarer = [dict(p) for p in karaktarer_ursprung]
+    for p in karaktarer:
+        p["poang"] = 0
+    for widget in root.winfo_children():
+        if isinstance(widget, tk.Button) and widget["text"] == "🔁 Spela igen":
+            widget.destroy()
+    starta_dejt()
+
+# Starta spelet
+spela_igen()
 
 # Starta loopen
 root.mainloop()
