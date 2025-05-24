@@ -101,7 +101,7 @@ def starta_dejt():
     if index < len(karaktarer):
         person = karaktarer[index]
         namn_label.config(text=f"Du dejtar {person['namn']}")
-        intressen_label.config(text=f"Intressen: {', '.join(person['intressen'])}")
+        intressen_label.config(text=f"Intresserad av: {', '.join(person['intressen'])}")
         ointressen_label.config(text=f"Ointresserad av: {', '.join(person['ointressen'])}")
         visa_val()
         countdown(t)
